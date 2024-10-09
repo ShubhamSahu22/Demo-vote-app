@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="docker-compose, docker, stack">
+    <meta name="author" content="Tutum dev team">
+    <meta name="description" content="Vote between {{option_a}} and {{option_b}} using this simple web app!">
+    <title>{{option_a}} vs {{option_b}}!</title>
+
+    <!-- Link to external stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='stylesheets/style.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" integrity="sha384-2UXVhW61k9br76x9I5FzFuaF7W2DhsHmlDjqjAYvZeaD2BfUe1lgPj76yT9FbUpR" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id="content-container">
+      <div id="content-container-center">
+        <h3>{{option_a}} vs {{option_b}}!</h3>
+        <form id="choice" method="POST" action="/">
+          <button id="a" type="submit" name="vote" class="btn a" value="a">{{option_a}}</button>
+          <button id="b" type="submit" name="vote" class="btn b" value="b">{{option_b}}</button>
+        </form>
+        <div id="tip">
+          (Tip: You can change your vote at any time)
+        </div>
+        <div id="hostname">
+          Processed by container ID: {{hostname}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts for handling voting and cookie management -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <!-- Conditionally disable buttons based on vote -->
+    {% if vote %}
+    <script>
+      $(document).ready(function() {
+        const vote = "{{vote}}";
+
+        if (vote === "a") {
+          $(".a").prop('disabled', true).html('{{option_a}} <i class="fa fa-check-circle"></i>');
+          $(".b").css('opacity', '0.5');
+        } else if (vote === "b") {
+          $(".b").prop('disabled', true).html('{{option_b}} <i class="fa fa-check-circle"></i>');
+          $(".a").css('opacity', '0.5');
+        }
+      });
+    </script>
+    {% endif %}
+  </body>
+</html>
